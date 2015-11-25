@@ -1,5 +1,7 @@
 package com.example.jacky.questionappmaster;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,7 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
         btnFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "wrong!!", Toast.LENGTH_SHORT).show();
+                determineButtonPress(false);
             }
         });
 
         btnTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "true!!", Toast.LENGTH_SHORT).show();
+                determineButtonPress(true);
             }
         });
 
@@ -73,27 +78,27 @@ public class MainActivity extends AppCompatActivity {
 
         setUpQuestion();
 
+        Paper.init(this);
 
     }
 
-        private void generateQuestions() {
+    private void generateQuestions() {
         questions = new ArrayList<>();
-            questions.add (new QuestionObject("Is the capital of England, London?", true, R.drawable.england));
-            questions.add (new QuestionObject("Is the capital of France, Paris?", true, R.drawable.england));
-            questions.add(new QuestionObject("Is tokyo in China?", false, R.drawable.england));
-            questions.add(new QuestionObject("Are indian people asian?", true, R.drawable.england));
-            questions.add (new QuestionObject("Is the capital of Canada, Toronto?", false, R.drawable.england));
-            questions.add(new QuestionObject("Is Australia the same country as New Zealand?", false, R.drawable.england));
-            questions.add(new QuestionObject("Is the capital of Germany, Berlin?", false, R.drawable.england));
-            questions.add(new QuestionObject("Is the capital of England London?", true, R.drawable.england));
-            questions.add(new QuestionObject("Is 5x2 = 10?", true, R.drawable.england));
-            questions.add(new QuestionObject("Is the capital of China, Hong Kong?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of England, London?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of France, Paris?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is tokyo in China?", false, R.drawable.england));
+        questions.add(new QuestionObject("Are indian people asian?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of Canada, Toronto?", false, R.drawable.england));
+        questions.add(new QuestionObject("Is Australia the same country as New Zealand?", false, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of Germany, Berlin?", false, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of England London?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is 5x2 = 10?", true, R.drawable.england));
+        questions.add(new QuestionObject("Is the capital of China, Hong Kong?", true, R.drawable.england));
 
 
+    }
 
-        }
-
-    private void setUpQuestion(){
+    private void setUpQuestion() {
         currentQuestion = questions.get(index);
 
         lblQuestion.setText(currentQuestion.getQuestion());
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         index++;
     }
 
-    private void determineButtonPress (boolean answer){
+    private void determineButtonPress(boolean answer) {
         boolean expectedAnswer = currentQuestion.isAnswer();
 
         if (answer == expectedAnswer) {
@@ -114,4 +119,24 @@ public class MainActivity extends AppCompatActivity {
         setUpQuestion();
     }
 
+
+    private void endgame() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Woohoo!")
+                .setMessage("You scored" + score + " points this round!")
+                .setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        HighScoreObject highScore = new HighScoreObject(score, "Jacky", new Date().getTime());
+                        List<HighScoreObject> highScores = Paper.book().read("highscores", new ArrayList<HighScoreObject>());
+                        highScores.add(highScore);
+                        Paper.book().write("highscores", highScores);
+                        finish();
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
+}
+
+
+
