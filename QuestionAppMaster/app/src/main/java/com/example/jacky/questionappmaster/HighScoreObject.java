@@ -1,41 +1,32 @@
 package com.example.jacky.questionappmaster;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+/**
+ * Created by che14143708 on 02/12/2015.
+ */
+public class HighScoreObject {
+    //nothing here!
+    private int score;
+    private String name;
+    private Long timestamp;
 
-public class HighScoreObject extends AppCompatActivity {
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_high_score_object);
+    public HighScoreObject(int score, String name, Long timestamp) {
+        this.score = score;
+        this.name = name;
+        this.timestamp = timestamp;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_high_score_object, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     public HighScoreObject() {
-//nothing here!
     }
+
+    public int getScore() {
+        return score;
+    }
+    public String getName() {
+        return name;
+    }
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+
 }
